@@ -1,0 +1,3 @@
+module App
+Main 1.0 Main.qml
+DirectoryInput 1.0 DirectoryInput.qml
