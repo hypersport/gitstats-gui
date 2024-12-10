@@ -4,8 +4,8 @@ import App 1.0
 
 ApplicationWindow {
     visible: true
-    width: 800
-    height: 600
+    width: 1280
+    height: 720
     title: "Git Stats Viewer"
 
     Column {

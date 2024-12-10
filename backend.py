@@ -5,7 +5,16 @@ class Backend(QObject):
 
     def __init__(self):
         super().__init__()
-        self._directory = ""
+        try:
+            with open("cache", "r") as file:
+                lines = file.readlines()
+            if len(lines) > 10:
+                lines = lines[-10:]
+                with open("cache", "w") as file:
+                    file.writelines(lines)
+        except FileNotFoundError:
+            lines = []
+        self._directory = lines[-1] if lines else ""
 
     @Slot(result=str)
     def getDirectory(self):
@@ -16,3 +25,5 @@ class Backend(QObject):
     def setDirectory(self, path: str):
         """Set the directory path."""
         self._directory = path
+        with open("cache", "a") as file:
+            file.write(f"{path}\n")

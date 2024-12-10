@@ -23,8 +23,10 @@ Item {
     FolderDialog {
         id: folderDialog
         onAccepted: {
-            backend.setDirectory(folderDialog.selectedFolder)  // Update backend with the selected folder
-            directoryInput.text = folderDialog.selectedFolder  // Update the TextField
+            let folderPath = folderDialog.selectedFolder.toString()
+            let path = folderPath.slice(8)
+            backend.setDirectory(path)  // Update backend with the selected folder
+            directoryInput.text = path  // Update the TextField
         }
     }
 }
