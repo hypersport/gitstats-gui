@@ -1,29 +1,31 @@
-from PySide6.QtCore import QObject, Signal, Slot
+from PySide6.QtCore import QObject, Slot, Property
+
+from recentdirectoriesmodel import RecentDirectoriesModel
 
 
 class Backend(QObject):
 
     def __init__(self):
         super().__init__()
-        try:
-            with open("cache", "r") as file:
-                lines = file.readlines()
-            if len(lines) > 10:
-                lines = lines[-10:]
-                with open("cache", "w") as file:
-                    file.writelines(lines)
-        except FileNotFoundError:
-            lines = []
-        self._directory = lines[-1] if lines else ""
+        self._recent_dirs_model = RecentDirectoriesModel()
+        self._recent_dirs_model.loadFromFile()
+        self._directory = self._recent_dirs_model.getLatestDirectory()
 
-    @Slot(result=str)
-    def getDirectory(self):
-        """Return the currently selected directory path."""
-        return self._directory
+    @Property(QObject, constant=True)
+    def recentDirsModel(self):
+        return self._recent_dirs_model
 
     @Slot(str)
     def setDirectory(self, path: str):
         """Set the directory path."""
         self._directory = path
-        with open("cache", "a") as file:
-            file.write(f"{path}\n")
+        self._recent_dirs_model.addDirectory(path)
+
+    def saveOnExit(self):
+        """Save the cache file."""
+        self._recent_dirs_model.saveToFile()
+
+    @Slot()
+    def clearRecentDirectories(self):
+        """Clears the recent directories."""
+        self._recent_dirs_model.clearDirectories()

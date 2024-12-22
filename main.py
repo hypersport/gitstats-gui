@@ -20,4 +20,7 @@ if __name__ == "__main__":
     if not engine.rootObjects():
         sys.exit(-1)
 
+    # Save recent directories on app exit
+    app.aboutToQuit.connect(backend.saveOnExit)
+
     sys.exit(app.exec())
