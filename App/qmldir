@@ -1,3 +1,5 @@
 module App
 Main 1.0 Main.qml
 AboutWindow 1.0 AboutWindow.qml
+MenuBar 1.0 MenuBar.qml
+FolderDialog 1.0 FolderDialog.qml
