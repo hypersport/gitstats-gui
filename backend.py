@@ -19,7 +19,7 @@ class Backend(QObject):
     def setDirectory(self, path: str):
         """Set the directory path."""
         self._directory = path
-        self._recent_dirs_model.addDirectory(path)
+        # self._recent_dirs_model.addDirectory(path)
 
     def saveOnExit(self):
         """Save the cache file."""

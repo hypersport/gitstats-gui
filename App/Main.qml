@@ -54,11 +54,9 @@ ApplicationWindow {
         }
         Menu {
             title: "Help"
-            Action {
+            MenuItem {
                 text: "About"
-                onTriggered: {
-                    console.log("About");
-                }
+                onTriggered: aboutWindow.show()
             }
         }
     }
@@ -69,5 +67,9 @@ ApplicationWindow {
             let path = folderPath.slice(8)
             backend.setDirectory(path)
         }
+    }
+
+    AboutWindow {
+        id: aboutWindow
     }
 }

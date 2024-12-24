@@ -29,7 +29,10 @@ class RecentDirectoriesModel(QAbstractListModel):
     def addDirectory(self, directory):
         """Adds a new directory, ensuring no duplicates and max 10 items."""
         if directory in self._directories:
+            index = self._directories.index(directory)
+            self.beginRemoveRows(QModelIndex(), index, index)
             self._directories.remove(directory)
+            self.endRemoveRows()
         self.beginInsertRows(QModelIndex(), 0, 0)
         self._directories.insert(0, directory)
         self.endInsertRows()
