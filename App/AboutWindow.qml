@@ -17,28 +17,29 @@ Window {
         Text {
             text: "Git Stats Viewer"
             font.pixelSize: 20
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignHCenter
         }
 
         Text {
             text: "Version: 0.0.1"
             font.pixelSize: 16
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignHCenter
         }
 
         Text {
             text: "Developed by: Hypersport"
             font.pixelSize: 16
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignHCenter
         }
 
         Text {
             text: "https://github.com/hypersport/gitstats-gui"
             font.pixelSize: 16
             color: "blue"
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignHCenter
 
             MouseArea {
+                cursorShape: Qt.PointingHandCursor
                 anchors.fill: parent
                 onClicked: {
                     Qt.openUrlExternally("https://github.com/hypersport/gitstats-gui")

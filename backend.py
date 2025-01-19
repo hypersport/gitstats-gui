@@ -17,15 +17,16 @@ class Backend(QObject):
 
     @Slot(str)
     def setDirectory(self, path: str):
-        """Set the directory path."""
+        self._directory = path
+
+    @Slot(str)
+    def openDirectory(self, path):
         self._directory = path
         self._recent_dirs_model.addDirectory(path)
 
     def saveOnExit(self):
-        """Save the cache file."""
         self._recent_dirs_model.saveToFile()
 
     @Slot()
     def clearRecentDirectories(self):
-        """Clears the recent directories."""
         self._recent_dirs_model.clearDirectories()
