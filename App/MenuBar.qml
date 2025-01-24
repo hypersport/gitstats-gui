@@ -5,6 +5,7 @@ MenuBar {
     id: menuBar
     width: parent.width
     Menu {
+        id: fileMenu
         width: parent.parent.width / 3
         title: "File"
         MenuItem {
@@ -14,12 +15,15 @@ MenuBar {
         MenuSeparator {
         }
         Repeater {
+            id: recentDirsMenu
             model: backend.recentDirsModel
             delegate: MenuItem {
                 Text {
                     width: parent.width
                     text: (index + 1) + ". " + model.directory
                     elide: Text.ElideMiddle
+                    anchors.centerIn: parent
+                    leftPadding: parent.parent.children[0].leftPadding
                 }
                 ToolTip {
                     visible: hovered
@@ -29,10 +33,14 @@ MenuBar {
                         radius: 5
                     }
                 }
-                onTriggered: backend.setDirectory(model.directory)
+                onTriggered: {
+                    fileMenu.close()
+                    backend.setDirectory(model.directory)
+                }
             }
         }
         MenuSeparator {
+            enabled: recentDirsMenu.count > 0
         }
         MenuItem {
             text: "Clean"

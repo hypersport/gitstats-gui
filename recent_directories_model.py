@@ -13,7 +13,7 @@ class RecentDirectoriesModel(QAbstractListModel):
         super().__init__()
         self._directories = []
 
-    def rowCount(self, parent=QModelIndex()):
+    def rowCount(self, index):
         return len(self._directories)
 
     def data(self, index, role):
@@ -26,20 +26,13 @@ class RecentDirectoriesModel(QAbstractListModel):
     def roleNames(self):
         return {v: k.encode() for k, v in self.Roles.items()}
 
-    def addDirectory(self, directory):
+    def addDirectory(self, directory: str):
         """Adds a new directory, ensuring no duplicates and max 10 items."""
         if directory in self._directories:
-            index = self._directories.index(directory)
-            self.beginRemoveRows(QModelIndex(), index, index)
             self._directories.remove(directory)
-            self.endRemoveRows()
-        self.beginInsertRows(QModelIndex(), 0, 0)
         self._directories.insert(0, directory)
-        self.endInsertRows()
         if len(self._directories) > 10:
-            self.beginRemoveRows(QModelIndex(), 10, len(self._directories) - 1)
             self._directories = self._directories[:10]
-            self.endRemoveRows()
         self.layoutChanged.emit()
 
     def saveToFile(self, filepath="cache"):
@@ -57,8 +50,8 @@ class RecentDirectoriesModel(QAbstractListModel):
         try:
             with open(filepath, "r", encoding="utf-8") as file:
                 directories = json.load(file)
-                self._directories = directories[:10]  # Ensure only 10 directories are loaded
-                self.layoutChanged.emit()  # Notify QML to update the view
+                self._directories = directories[:10]
+                self.layoutChanged.emit()
         except Exception as e:
             print(f"Error loading directories from file: {e}")
 

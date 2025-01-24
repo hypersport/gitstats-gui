@@ -15,7 +15,7 @@ if __name__ == "__main__":
     engine.rootContext().setContextProperty("backend", backend)
 
     # Load the QML module
-    engine.loadFromModule("App", "Main")
+    engine.loadFromModule("App", "Main" if backend.hasGit else "QuitWindow")
 
     if not engine.rootObjects():
         sys.exit(-1)

@@ -1,12 +1,13 @@
-from PySide6.QtCore import QObject, Slot, Property
+from PySide6.QtCore import QObject, Signal, Slot, Property
 
-from recentdirectoriesmodel import RecentDirectoriesModel
+from git_command import GitCommand
+from recent_directories_model import RecentDirectoriesModel
 
 
 class Backend(QObject):
-
     def __init__(self):
         super().__init__()
+        self._git_command = GitCommand()
         self._recent_dirs_model = RecentDirectoriesModel()
         self._recent_dirs_model.loadFromFile()
         self._directory = self._recent_dirs_model.getLatestDirectory()
@@ -18,9 +19,10 @@ class Backend(QObject):
     @Slot(str)
     def setDirectory(self, path: str):
         self._directory = path
+        self._recent_dirs_model.addDirectory(path)
 
     @Slot(str)
-    def openDirectory(self, path):
+    def openDirectory(self, path: str):
         self._directory = path
         self._recent_dirs_model.addDirectory(path)
 
@@ -30,3 +32,7 @@ class Backend(QObject):
     @Slot()
     def clearRecentDirectories(self):
         self._recent_dirs_model.clearDirectories()
+
+    @property
+    def hasGit(self):
+        return self._git_command.hasGit()
