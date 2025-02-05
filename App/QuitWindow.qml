@@ -14,8 +14,20 @@ ApplicationWindow {
         anchors.centerIn: parent
         spacing: 20
         Text {
-            text: "Git was NOT found on your computer, please make sure you have installed git and add to path"
+            text: "Git is NOT found on your computer"
             font.pixelSize: 20
+            Layout.alignment: Qt.AlignHCenter
+        }
+
+        Text {
+            text: "Please make sure you have installed git and added to path"
+            font.pixelSize: 20
+            Layout.alignment: Qt.AlignHCenter
+        }
+
+        Text {
+            text: "You can download git from Official Website"
+            font.pixelSize: 16
             Layout.alignment: Qt.AlignHCenter
         }
 
@@ -30,14 +42,9 @@ ApplicationWindow {
                 anchors.fill: parent
                 onClicked: {
                     Qt.openUrlExternally("https://git-scm.com/downloads")
+                    Qt.quit()
                 }
             }
-        }
-
-        Button {
-            text: "Quit"
-            Layout.alignment: Qt.AlignHCenter
-            onClicked: Qt.quit()
         }
     }
 }

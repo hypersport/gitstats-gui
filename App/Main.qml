@@ -12,11 +12,23 @@ ApplicationWindow {
         id: menuBar
     }
 
-    FolderDialog {
-        id: folderDialog
+    Rectangle {
+        width: parent.width
+        height: 0.5
+        color: "lightgray"
+        x: 0
+        y: menuBar.height - 0.5
     }
 
-    AboutWindow {
-        id: aboutWindow
+    TitleLabel {
+        id: titleLabel
+    }
+
+    background: Rectangle {
+        color: "white"
+    }
+    
+    Connections {
+        id: connections
     }
 }

@@ -8,7 +8,8 @@ if __name__ == "__main__":
 
     # Set up QQmlApplicationEngine
     engine = QQmlApplicationEngine()
-    engine.addImportPath(sys.path[0])  # Add the current directory to the import path
+    # Add the current directory to the import path
+    engine.addImportPath(sys.path[0])
 
     # Create the backend and expose it to QML
     backend = Backend()

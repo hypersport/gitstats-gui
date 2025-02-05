@@ -28,6 +28,8 @@ MenuBar {
                 ToolTip {
                     visible: hovered
                     text: model.directory
+                    anchors.centerIn: parent
+                    implicitWidth: parent.width
                     background: Rectangle {
                         border.color: "black"
                         radius: 5
@@ -59,5 +61,11 @@ MenuBar {
             text: "About"
             onTriggered: aboutWindow.show()
         }
+    }
+    FolderDialog {
+        id: folderDialog
+    }
+    AboutWindow {
+        id: aboutWindow
     }
 }

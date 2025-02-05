@@ -5,6 +5,8 @@ from recent_directories_model import RecentDirectoriesModel
 
 
 class Backend(QObject):
+    projectNameChanged = Signal()
+
     def __init__(self):
         super().__init__()
         self._git_command = GitCommand()
@@ -36,3 +38,13 @@ class Backend(QObject):
     @property
     def hasGit(self):
         return self._git_command.hasGit()
+
+    def getProjectName(self):
+        return self._git_command.getProjectName(
+            self._directory) if self._directory else "Choose Git Project First"
+
+    def setProjectName(self):
+        self.projectNameChanged.emit()
+
+    projectName = Property(
+        str, getProjectName, setProjectName, notify=projectNameChanged)

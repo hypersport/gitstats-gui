@@ -4,3 +4,6 @@ AboutWindow 1.0 AboutWindow.qml
 MenuBar 1.0 MenuBar.qml
 FolderDialog 1.0 FolderDialog.qml
 QuitWindow  1.0 QuitWindow.qml
+GeneralPage 1.0 GeneralPage.qml
+Connections 1.0 Connections.qml
+TitleLabel 1.0 TitleLabel.qml
