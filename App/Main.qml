@@ -6,7 +6,7 @@ ApplicationWindow {
     visible: true
     height: 720
     width: 1080
-    title: "Git Stats Viewer"
+    title: backend.projectName + " - Git Stats Viewer"
 
     MenuBar {
         id: menuBar
@@ -20,12 +20,17 @@ ApplicationWindow {
         y: menuBar.height - 0.5
     }
 
-    TitleLabel {
-        id: titleLabel
+    TabBar {
+        id: tabBar
+        anchors.top: menuBar.bottom
     }
 
     background: Rectangle {
         color: "white"
+    }
+
+    NotGitRepoWindow {
+        id: notGitRepoWindow
     }
     
     Connections {

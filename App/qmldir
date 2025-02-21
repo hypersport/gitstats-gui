@@ -1,9 +1,10 @@
 module App
 Main 1.0 Main.qml
 AboutWindow 1.0 AboutWindow.qml
+TabBar 1.0 TabBar.qml
 MenuBar 1.0 MenuBar.qml
 FolderDialog 1.0 FolderDialog.qml
 QuitWindow  1.0 QuitWindow.qml
 GeneralPage 1.0 GeneralPage.qml
+NotGitRepoWindow 1.0 NotGitRepoWindow.qml
 Connections 1.0 Connections.qml
-TitleLabel 1.0 TitleLabel.qml

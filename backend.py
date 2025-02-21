@@ -6,6 +6,7 @@ from recent_directories_model import RecentDirectoriesModel
 
 class Backend(QObject):
     projectNameChanged = Signal()
+    checkGitRepo = Signal(bool)
 
     def __init__(self):
         super().__init__()
@@ -20,13 +21,17 @@ class Backend(QObject):
 
     @Slot(str)
     def setDirectory(self, path: str):
-        self._directory = path
-        self._recent_dirs_model.addDirectory(path)
+        if self.isGitRepo(path):
+            self._directory = path
+            self._recent_dirs_model.addDirectory(path)
+            self.setProjectName()
 
     @Slot(str)
     def openDirectory(self, path: str):
-        self._directory = path
-        self._recent_dirs_model.addDirectory(path)
+        if self.isGitRepo(path):
+            self._directory = path
+            self._recent_dirs_model.addDirectory(path)
+            self.setProjectName()
 
     def saveOnExit(self):
         self._recent_dirs_model.saveToFile()
@@ -34,10 +39,17 @@ class Backend(QObject):
     @Slot()
     def clearRecentDirectories(self):
         self._recent_dirs_model.clearDirectories()
+        self._directory = ''
+        self.setProjectName()
 
     @property
     def hasGit(self):
         return self._git_command.hasGit()
+
+    def isGitRepo(self, path: str):
+        result = self._git_command.isGitRepo(path)
+        self.checkGitRepo.emit(result)
+        return result
 
     def getProjectName(self):
         return self._git_command.getProjectName(
