@@ -1,71 +1,45 @@
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls.Basic
 
 MenuBar {
     id: menuBar
     width: parent.width
-    Menu {
-        id: fileMenu
-        width: parent.parent.width / 3
-        title: "File"
-        MenuItem {
-            text: "Open"
-            onTriggered: folderDialog.open()
+
+    FileMenu { }
+
+    HelpMenu { }
+
+    delegate: MenuBarItem {
+        id: menuBarItem
+
+        contentItem: Text {
+            text: menuBarItem.text
+            font: menuBarItem.font
+            opacity: enabled ? 1.0 : 0.3
+            color: menuBarItem.highlighted ? "#ffffff" : "#21be2b"
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
         }
-        MenuSeparator {
-        }
-        Repeater {
-            id: recentDirsMenu
-            model: backend.recentDirsModel
-            delegate: MenuItem {
-                Text {
-                    width: parent.width
-                    text: (index + 1) + ". " + model.directory
-                    elide: Text.ElideMiddle
-                    anchors.centerIn: parent
-                    leftPadding: parent.parent.children[0].leftPadding
-                }
-                ToolTip {
-                    visible: hovered
-                    text: model.directory
-                    anchors.centerIn: parent
-                    implicitWidth: parent.width
-                    background: Rectangle {
-                        border.color: "black"
-                        radius: 5
-                    }
-                }
-                onTriggered: {
-                    fileMenu.close()
-                    backend.setDirectory(model.directory)
-                }
-            }
-        }
-        MenuSeparator {
-            enabled: recentDirsMenu.count > 0
-        }
-        MenuItem {
-            text: "Clean"
-            onTriggered: backend.clearRecentDirectories()
-        }
-        MenuSeparator {
-        }
-        MenuItem {
-            text: "Exit"
-            onTriggered: Qt.quit()
+
+        background: Rectangle {
+            implicitWidth: 40
+            implicitHeight: 40
+            opacity: enabled ? 1 : 0.3
+            color: menuBarItem.highlighted ? "#21be2b" : "transparent"
         }
     }
-    Menu {
-        title: "Help"
-        MenuItem {
-            text: "About"
-            onTriggered: aboutWindow.show()
+
+    background: Rectangle {
+        implicitWidth: 40
+        implicitHeight: 40
+        color: "#ffffff"
+
+        Rectangle {
+            color: "#21be2b"
+            width: parent.width
+            height: 1
+            anchors.bottom: parent.bottom
         }
-    }
-    FolderDialog {
-        id: folderDialog
-    }
-    AboutWindow {
-        id: aboutWindow
     }
 }

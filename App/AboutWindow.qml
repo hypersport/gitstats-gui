@@ -4,7 +4,7 @@ import QtQuick.Layouts
 
 Window {
     id: aboutWindow
-    title: "About"
+    title: qsTr("About")
     modality: Qt.ApplicationModal  // Block other operations
     width: aboutColumnLayout.implicitWidth + 20
     height: aboutColumnLayout.implicitHeight + 20
@@ -15,19 +15,19 @@ Window {
         spacing: 10
 
         Text {
-            text: "Git Stats Viewer"
+            text: qsTr("Git Stats Viewer")
             font.pixelSize: 20
             Layout.alignment: Qt.AlignHCenter
         }
 
         Text {
-            text: "Version: 0.0.1"
+            text: qsTr("Version: 0.0.1")
             font.pixelSize: 16
             Layout.alignment: Qt.AlignHCenter
         }
 
         Text {
-            text: "Developed by: Hypersport"
+            text: qsTr("Developed by: Hypersport")
             font.pixelSize: 16
             Layout.alignment: Qt.AlignHCenter
         }

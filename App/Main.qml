@@ -6,18 +6,10 @@ ApplicationWindow {
     visible: true
     height: 720
     width: 1080
-    title: backend.projectName + " - Git Stats Viewer"
+    title: "Git Stats Viewer - " + backend.projectName
 
     MenuBar {
         id: menuBar
-    }
-
-    Rectangle {
-        width: parent.width
-        height: 0.5
-        color: "lightgray"
-        x: 0
-        y: menuBar.height - 0.5
     }
 
     TabBar {
@@ -27,6 +19,14 @@ ApplicationWindow {
 
     background: Rectangle {
         color: "white"
+    }
+
+    FolderDialog {
+        id: folderDialog
+    }
+
+    AboutWindow {
+        id: aboutWindow
     }
 
     NotGitRepoWindow {

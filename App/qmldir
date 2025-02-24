@@ -3,6 +3,9 @@ Main 1.0 Main.qml
 AboutWindow 1.0 AboutWindow.qml
 TabBar 1.0 TabBar.qml
 MenuBar 1.0 MenuBar.qml
+FileMenu 1.0 FileMenu.qml
+HelpMenu 1.0 HelpMenu.qml
+CustomMenuSeparator 1.0 CustomMenuSeparator.qml
 FolderDialog 1.0 FolderDialog.qml
 QuitWindow  1.0 QuitWindow.qml
 GeneralPage 1.0 GeneralPage.qml

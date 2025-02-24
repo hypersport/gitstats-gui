@@ -4,7 +4,7 @@ import QtQuick.Layouts
 
 ApplicationWindow {
     visible: true
-    title: "No Git Found"
+    title: qsTr("No Git Found")
     modality: Qt.ApplicationModal  // Block other operations
     width: quitColumnLayout.implicitWidth + 20
     height: quitColumnLayout.implicitHeight + 20
@@ -14,19 +14,19 @@ ApplicationWindow {
         anchors.centerIn: parent
         spacing: 20
         Text {
-            text: "Git is NOT found on your computer"
+            text: qsTr("Git is NOT found on your computer")
             font.pixelSize: 20
             Layout.alignment: Qt.AlignHCenter
         }
 
         Text {
-            text: "Please make sure you have installed git and added to path"
+            text: qsTr("Please make sure you have installed git and added to path")
             font.pixelSize: 20
             Layout.alignment: Qt.AlignHCenter
         }
 
         Text {
-            text: "You can download git from Official Website"
+            text: qsTr("You can download git from Official Website")
             font.pixelSize: 16
             Layout.alignment: Qt.AlignHCenter
         }
