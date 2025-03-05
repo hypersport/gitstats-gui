@@ -8,9 +8,6 @@ Menu {
         onTriggered: aboutWindow.show()
     }
 
-    topPadding: 2
-    bottomPadding: 2
-
     delegate: MenuItem {
         id: menuItem
         implicitWidth: 70

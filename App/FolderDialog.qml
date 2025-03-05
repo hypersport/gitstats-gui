@@ -6,7 +6,7 @@ FolderDialog {
     id: folderDialog
     onAccepted: {
         let folderPath = folderDialog.selectedFolder.toString()
-        let path = folderPath.slice(8)
+        let path = folderPath.replace("file:///", "")
         backend.openDirectory(path)
     }
 }

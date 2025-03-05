@@ -5,9 +5,10 @@ TabBar 1.0 TabBar.qml
 MenuBar 1.0 MenuBar.qml
 FileMenu 1.0 FileMenu.qml
 HelpMenu 1.0 HelpMenu.qml
-CustomMenuSeparator 1.0 CustomMenuSeparator.qml
+LineSeparator 1.0 LineSeparator.qml
 FolderDialog 1.0 FolderDialog.qml
 QuitWindow  1.0 QuitWindow.qml
-GeneralPage 1.0 GeneralPage.qml
 NotGitRepoWindow 1.0 NotGitRepoWindow.qml
 Connections 1.0 Connections.qml
+PageStackLayout 1.0 PageStackLayout.qml
+GeneralPage 1.0 GeneralPage.qml

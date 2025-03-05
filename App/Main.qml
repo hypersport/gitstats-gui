@@ -4,21 +4,20 @@ import App 1.0
 
 ApplicationWindow {
     visible: true
-    height: 720
-    width: 1080
+    minimumHeight: 720
+    minimumWidth: 1080
     title: "Git Stats Viewer - " + backend.projectName
 
-    MenuBar {
+    menuBar: MenuBar {
         id: menuBar
     }
 
-    TabBar {
+    header: TabBar {
         id: tabBar
-        anchors.top: menuBar.bottom
     }
 
-    background: Rectangle {
-        color: "white"
+    PageStackLayout {
+        id: pageStackLayout
     }
 
     FolderDialog {

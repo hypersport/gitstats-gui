@@ -35,11 +35,6 @@ MenuBar {
         implicitHeight: 40
         color: "#ffffff"
 
-        Rectangle {
-            color: "#21be2b"
-            width: parent.width
-            height: 1
-            anchors.bottom: parent.bottom
-        }
+        LineSeparator { }
     }
 }

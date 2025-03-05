@@ -5,12 +5,9 @@ TabBar {
     id: tabBar
     width: parent.width
 
-    background: Rectangle {
-        color: "#eeeeee"
-    }
-
     Repeater {
-        model: ["General", "Activity", "Authors", "Files", "Lines", "Tags"]
+        model: [qsTr("General"), qsTr("Activity"), qsTr("Authors"),
+                qsTr("Files"), qsTr("Lines"), qsTr("Tags")]
 
         TabButton {
             text: modelData

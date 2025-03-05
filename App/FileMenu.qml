@@ -9,7 +9,6 @@ Menu {
         text: qsTr("Open")
         onTriggered: folderDialog.open()
     }
-    CustomMenuSeparator {}
     
     Menu {
         title: qsTr("Recent")
@@ -42,12 +41,7 @@ Menu {
                     implicitHeight: 40
                     opacity: enabled ? 1 : 0.3
                     color: repeaterItem.highlighted ? "#21be2b" : "transparent"
-                    Rectangle {
-                        color: "#21be2b"
-                        width: parent.width
-                        height: 1
-                        anchors.bottom: parent.bottom
-                    }
+                    LineSeparator { }
                 }
 
                 // ToolTip {
@@ -85,21 +79,16 @@ Menu {
             radius: 2
         }
     }
-    CustomMenuSeparator {}
 
     Action {
         text: qsTr("Clean")
         onTriggered: backend.clearRecentDirectories()
     }
-    CustomMenuSeparator {}
 
     Action {
         text: qsTr("Exit")
         onTriggered: Qt.quit()
     }
-
-    topPadding: 2
-    bottomPadding: 2
 
     delegate: MenuItem {
         id: menuItem
@@ -139,6 +128,7 @@ Menu {
             implicitHeight: 40
             opacity: enabled ? 1 : 0.3
             color: menuItem.highlighted ? "#21be2b" : "transparent"
+            LineSeparator { }
         }
     }
 
