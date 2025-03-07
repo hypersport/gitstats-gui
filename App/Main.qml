@@ -6,7 +6,7 @@ ApplicationWindow {
     visible: true
     minimumHeight: 720
     minimumWidth: 1080
-    title: "Git Stats Viewer - " + backend.projectName
+    title: "Git Stats Viewer - " + backend.generalData["name"]
 
     menuBar: MenuBar {
         id: menuBar

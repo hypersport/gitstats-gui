@@ -8,10 +8,10 @@ class GitCommand:
                                 capture_output=True, text=True)
         return (result.stdout, result.stderr)
 
-    def hasGit(self):
+    def getGitVersion(self):
         command = "git version"
         result = self._runCommand(command)
-        return "git version" in result[0]
+        return result[0]
 
     def isGitRepo(self, path: str):
         command = "git rev-parse --is-inside-work-tree"
