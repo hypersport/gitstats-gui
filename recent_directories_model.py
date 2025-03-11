@@ -6,7 +6,7 @@ from PySide6.QtCore import QAbstractListModel, Qt, QModelIndex
 
 class RecentDirectoriesModel(QAbstractListModel):
     Roles = {
-        "directory": Qt.UserRole + 1
+        'directory': Qt.UserRole + 1
     }
 
     def __init__(self):
@@ -19,7 +19,7 @@ class RecentDirectoriesModel(QAbstractListModel):
     def data(self, index, role):
         if not index.isValid() or not (0 <= index.row() < len(self._directories)):
             return None
-        if role == self.Roles["directory"]:
+        if role == self.Roles['directory']:
             return self._directories[index.row()]
         return None
 
@@ -35,25 +35,25 @@ class RecentDirectoriesModel(QAbstractListModel):
             self._directories = self._directories[:10]
         self.layoutChanged.emit()
 
-    def saveToFile(self, filepath="cache"):
+    def saveToFile(self, filepath='cache'):
         """Save the directories to a JSON file."""
         try:
-            with open(filepath, "w", encoding="utf-8") as file:
+            with open(filepath, 'w', encoding='utf-8') as file:
                 json.dump(self._directories, file)
         except Exception as e:
-            print(f"Error saving directories to file: {e}")
+            print(f'Error saving directories to file: {e}')
 
-    def loadFromFile(self, filepath="cache"):
+    def loadFromFile(self, filepath='cache'):
         """Load the directories from a JSON file."""
         if not os.path.exists(filepath):
             return
         try:
-            with open(filepath, "r", encoding="utf-8") as file:
+            with open(filepath, 'r', encoding='utf-8') as file:
                 directories = json.load(file)
                 self._directories = directories[:10]
                 self.layoutChanged.emit()
         except Exception as e:
-            print(f"Error loading directories from file: {e}")
+            print(f'Error loading directories from file: {e}')
 
     def clearDirectories(self):
         """Clear all directories from the list."""

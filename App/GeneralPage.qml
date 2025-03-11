@@ -40,7 +40,6 @@ GridLayout {
         Text {
             text: backend.generalData["generated"]
             font.pixelSize: 20
-            leftPadding: 20
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
         }
@@ -67,7 +66,58 @@ GridLayout {
         Text {
             text: backend.generalData["git"]
             font.pixelSize: 20
-            leftPadding: 20
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+        }
+    }
+
+    // Git Branch
+    Label {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40
+        Text {
+            text: qsTr("Git Branch :")
+            font.pixelSize: 20
+            rightPadding: 20
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+        }
+        background: Rectangle {
+            color: "#21be2b"
+        }
+    }
+    Label {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40
+        Text {
+            text: backend.generalData["branch"]
+            font.pixelSize: 20
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+        }
+        background: Rectangle {
+            color: "#21be2b"
+        }
+    }
+
+    // Git Version
+    Label {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40
+        Text {
+            text: qsTr("Project Period :")
+            font.pixelSize: 20
+            rightPadding: 20
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+        }
+    }
+    Label {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40
+        Text {
+            text: backend.generalData["first_commit_time"] + " - " + backend.generalData["last_commit_time"]
+            font.pixelSize: 20
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
         }
