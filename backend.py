@@ -18,7 +18,11 @@ class Backend(QObject):
         self._general_data = {'name': 'Choose Git Project First',
                               'branch': 'Choose Git Project First',
                               'first_commit_time': 'Choose Git Project First',
-                              'last_commit_time': 'Choose Git Project First'}
+                              'last_commit_time': 'Choose Git Project First',
+                              'age': 'Choose Git Project First',
+                              'total_files': 'Choose Git Project First',
+                              'total_commits': 'Choose Git Project First',
+                              'total_authors': 'Choose Git Project First'}
         self.setProject()
 
     @Property(QObject, constant=True)
@@ -69,9 +73,13 @@ class Backend(QObject):
                 self._directory)
             self._general_data['branch'] = self._git_command.getCurrentBranch(
                 self._directory)
-            self._git_command.generateCommitInfo(self._directory)
+            self._git_command.generateGitStats(self._directory)
             self._general_data['first_commit_time'] = self._git_command.getFirstCommitTime()
             self._general_data['last_commit_time'] = self._git_command.getLastCommitTime()
+            self._general_data['age'] = self._git_command.getAge()
+            self._general_data['total_files'] = self._git_command.getTotalFiles()
+            self._general_data['total_commits'] = self._git_command.getTotalCommits()
+            self._general_data['total_authors'] = self._git_command.getTotalAuthors()
         self._general_data['generated'] = datetime.datetime.now().strftime(
             '%Y-%m-%d %H:%M:%S')
         self.projectChanged.emit()
