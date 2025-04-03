@@ -2,6 +2,7 @@ from PySide6.QtCore import QObject, Signal, Slot, Property, QThread
 import datetime
 
 from git_command import GitCommand
+from authors_model import AuthorsModel
 from recent_directories_model import RecentDirectoriesModel
 
 
@@ -25,7 +26,9 @@ class Backend(QObject):
 
     def __init__(self):
         super().__init__()
+        self._is_loading = False
         self._git_command = GitCommand()
+        self._authors_model = None
         self._recent_dirs_model = RecentDirectoriesModel()
         self._recent_dirs_model.loadFromFile()
         self._directory = self._recent_dirs_model.getLatestDirectory()
@@ -38,7 +41,12 @@ class Backend(QObject):
     def recentDirsModel(self):
         return self._recent_dirs_model
 
+    @Property(QObject, constant=True)
+    def authorsModel(self):
+        return self._authors_model
+
     def generateGitStats(self):
+        self._is_loading = True
         self.loading.emit(True)
         if self._git_command_thread:
             self._git_command_thread.quit()
@@ -86,28 +94,37 @@ class Backend(QObject):
         self.checkGitRepo.emit(result)
         return result
 
+    def _generateData(self):
+        self._general_data['name'] = self._git_command.getProjectName(self._directory)
+        self._general_data['branch'] = self._git_command.getCurrentBranch(self._directory)
+        self._general_data['first_commit_time'] = self._git_command.getFirstCommitTime()
+        self._general_data['last_commit_time'] = self._git_command.getLastCommitTime()
+        self._general_data['age'] = self._git_command.getAge()
+        self._general_data['total_files'] = self._git_command.getTotalFiles()
+        self._general_data['total_commits'] = self._git_command.getTotalCommits()
+        self._general_data['total_authors'] = self._git_command.getTotalAuthors()
+        self._general_data['total_lines'] = self._git_command.getTotalLines()
+        self._general_data['generated'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    def _generateAuthorsData(self):
+        authors = self._git_command.getAuthorsData()
+        authors.sort(key=lambda x: x[1], reverse=True)
+        self._authors_model = AuthorsModel(authors)
+
     def getProject(self):
         return self._general_data
 
     def setProject(self):
         if self._directory and self.isGitRepo(self._directory):
-            self._general_data['name'] = self._git_command.getProjectName(
-                self._directory)
-            self._general_data['branch'] = self._git_command.getCurrentBranch(
-                self._directory)
-            self._general_data['first_commit_time'] = self._git_command.getFirstCommitTime()
-            self._general_data['last_commit_time'] = self._git_command.getLastCommitTime()
-            self._general_data['age'] = self._git_command.getAge()
-            self._general_data['total_files'] = self._git_command.getTotalFiles()
-            self._general_data['total_commits'] = self._git_command.getTotalCommits()
-            self._general_data['total_authors'] = self._git_command.getTotalAuthors()
-            self._general_data['total_lines'] = self._git_command.getTotalLines()
+            self._generateData()
+            self._generateAuthorsData()
         else:
             self._general_data = {key: '' for key in self._general_data}
-        self._general_data['generated'] = datetime.datetime.now().strftime(
-            '%Y-%m-%d %H:%M:%S')
+            self._authors_model = None
         self.projectChanged.emit()
-        self.loading.emit(False)
+        if self._is_loading:
+            self._is_loading = False
+            self.loading.emit(False)
 
     generalData = Property(
         'QVariantMap', getProject, setProject, notify=projectChanged)

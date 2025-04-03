@@ -13,3 +13,4 @@ FolderDialog 1.0 FolderDialog.qml
 Connections 1.0 Connections.qml
 PageStackLayout 1.0 PageStackLayout.qml
 GeneralPage 1.0 GeneralPage.qml
+AuthorsPage 1.0 AuthorsPage.qml

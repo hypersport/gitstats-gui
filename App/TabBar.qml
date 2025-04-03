@@ -6,7 +6,7 @@ TabBar {
     width: parent.width
 
     Repeater {
-        model: [qsTr("General"), qsTr("Activity"), qsTr("Authors"),
+        model: [qsTr("General"), qsTr("Authors"), qsTr("Activity"),
                 qsTr("Files"), qsTr("Lines"), qsTr("Tags")]
 
         TabButton {

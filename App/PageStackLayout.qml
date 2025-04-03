@@ -8,9 +8,12 @@ StackLayout {
     anchors.fill: parent
 
     GeneralPage {
+        id: generalPage
+    }
+    AuthorsPage {
+        id: authorsPage
     }
     // ActivityPage {}
-    // AuthorsPage {}
     // FilesPage {}
     // LinesPage {}
     // TagsPage {}

@@ -107,3 +107,30 @@ class GitCommand:
             total_insertions += int(insertions)
             total_deletions += int(deletions)
         return f'{total_insertions - total_deletions} {total_insertions} {total_deletions}'
+
+    def getAuthorsData(self):
+        authors = {}
+        for commit in self._commit_stats:
+            _, datetime_, user, insertions, deletions = commit
+            date_ = datetime_.split(' ')[0]
+            if user in authors:
+                authors[user][0] += 1
+                authors[user][1] = date_
+                if authors[user][3] != date_:
+                    authors[user][3] = date_
+                    authors[user][4] += 1
+                authors[user][5] += int(insertions)
+                authors[user][6] += int(deletions)
+            else:
+                # [commits, first_commit, last_commit, current_day, active_days, insertions, deletions]
+                authors[user] = [1, date_, date_, date_, 1, int(insertions), int(deletions)]
+        # [user, commits, first_commit, last_commit, total_lines, insertions, deletions, days, active_days, active_percentage]
+        result = []
+        date_format = "%Y-%m-%d"
+        for user, data in authors.items():
+            first_commit_date = datetime.datetime.strptime(data[1], date_format)
+            last_commit_date = datetime.datetime.strptime(data[2], date_format)
+            days = max(1, (last_commit_date - first_commit_date).days)
+            active_percentage = (data[4] / days) * 100
+            result.append([user, data[0], data[1], data[2], data[5] - data[6], data[5], data[6], days, data[4], active_percentage])
+        return result
