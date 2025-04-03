@@ -42,7 +42,7 @@ class GitCommand:
             command = f'git log --shortstat --first-parent -m --pretty=format:"%at %ai %aN" {last_commit}'
             result = self._runCommand(command, path)
             commits = result[0].strip().split('\n\n')
-            pattern = re.compile(r'(\d+) (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) [\+\-]\d{4} (\w+)')
+            pattern = re.compile(r'(\d+) (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) [\+\-]\d{4} (.+?)\n')
             for commit in commits:
                 match = pattern.match(commit)
                 if not match:
@@ -52,7 +52,7 @@ class GitCommand:
                 deletions = re.search(r"(\d+) deletions?\(-\)", commit)
                 insertions_count = insertions.group(1) if insertions else '0'
                 deletions_count = deletions.group(1) if deletions else '0'
-                self._commit_stats.append(f'{timestamp} {datetime_} {user} {insertions_count} {deletions_count}')
+                self._commit_stats.append([timestamp, datetime_, user, insertions_count, deletions_count])
             # Get file stats
             self._file_stats = {'Unknown': 0}
             command = f'git ls-tree -r --name-only {last_commit}'
@@ -68,21 +68,21 @@ class GitCommand:
     def getFirstCommitTime(self):
         if not self._commit_stats:
             return ''
-        first_commit_info = self._commit_stats[-1].split(' ')
-        return ' '.join(first_commit_info[1:3])
+        first_commit_info = self._commit_stats[-1]
+        return first_commit_info[1]
     
     def getLastCommitTime(self):
         if not self._commit_stats:
             return ''
-        last_commit_info = self._commit_stats[0].split(' ')
-        return ' '.join(last_commit_info[1:3])
+        last_commit_info = self._commit_stats[0]
+        return last_commit_info[1]
 
     def getAge(self):
         if not self._commit_stats:
             return ''
-        first_commit_info = self._commit_stats[-1].split(' ')
+        first_commit_info = self._commit_stats[-1]
         first_date = datetime.datetime.fromtimestamp(int(first_commit_info[0]))
-        last_commit_info = self._commit_stats[0].split(' ')
+        last_commit_info = self._commit_stats[0]
         last_date = datetime.datetime.fromtimestamp(int(last_commit_info[0]))
         delta = last_date - first_date
         return delta.days
@@ -96,14 +96,14 @@ class GitCommand:
     def getTotalAuthors(self):
         authors = set()
         for commit in self._commit_stats:
-            authors.add(commit.split(' ')[3])
+            authors.add(commit[2])
         return len(authors)
 
     def getTotalLines(self):
         total_insertions = 0
         total_deletions = 0
         for commit in self._commit_stats:
-            insertions, deletions = commit.split(' ')[4:6]
+            insertions, deletions = commit[3:5]
             total_insertions += int(insertions)
             total_deletions += int(deletions)
         return f'{total_insertions - total_deletions} {total_insertions} {total_deletions}'
