@@ -1,14 +1,15 @@
 module App
 Main 1.0 Main.qml
+QuitWindow  1.0 QuitWindow.qml
 AboutWindow 1.0 AboutWindow.qml
+LoadingWindow 1.0 LoadingWindow.qml
+NotGitRepoWindow 1.0 NotGitRepoWindow.qml
 TabBar 1.0 TabBar.qml
 MenuBar 1.0 MenuBar.qml
 FileMenu 1.0 FileMenu.qml
 HelpMenu 1.0 HelpMenu.qml
 LineSeparator 1.0 LineSeparator.qml
 FolderDialog 1.0 FolderDialog.qml
-QuitWindow  1.0 QuitWindow.qml
-NotGitRepoWindow 1.0 NotGitRepoWindow.qml
 Connections 1.0 Connections.qml
 PageStackLayout 1.0 PageStackLayout.qml
 GeneralPage 1.0 GeneralPage.qml

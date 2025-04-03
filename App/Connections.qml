@@ -9,4 +9,12 @@ Connections {
             notGitRepoWindow.show()
         }
     }
+
+    function onLoading(isLoading) {
+        if (isLoading) {
+            loadingWindow.show()
+        } else {
+            loadingWindow.close()
+        }
+    }
 }

@@ -35,6 +35,12 @@ class RecentDirectoriesModel(QAbstractListModel):
             self._directories = self._directories[:10]
         self.layoutChanged.emit()
 
+    def deleteDirectory(self, directory: str):
+        """Delete a specific directory from the list."""
+        if directory in self._directories:
+            self._directories.remove(directory)
+        self.layoutChanged.emit()
+
     def saveToFile(self, filepath='cache'):
         """Save the directories to a JSON file."""
         try:

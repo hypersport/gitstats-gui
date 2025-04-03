@@ -7,13 +7,16 @@ GridLayout {
     columnSpacing: 0
     rowSpacing: 0
 
+    function isNotEmpty() {
+        return backend.generalData["name"] !== ''
+    }
     // Project Name
     Label {
         Layout.columnSpan: 2
         Layout.fillWidth: true
         Layout.preferredHeight: 60
         Text {
-            text: backend.generalData["name"]
+            text: isNotEmpty() ? backend.generalData["name"] : "Open a Git Repository"
             font.pixelSize: 40
             anchors.centerIn: parent
         }
@@ -64,7 +67,7 @@ GridLayout {
         Layout.fillWidth: true
         Layout.preferredHeight: 40
         Text {
-            text: backend.generalData["git"]
+            text: isNotEmpty() ? backend.generalData["git"] : ""
             font.pixelSize: 20
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
@@ -142,7 +145,7 @@ GridLayout {
         Layout.fillWidth: true
         Layout.preferredHeight: 40
         Text {
-            text: backend.generalData["age"] + " days ( " + (backend.generalData["age"] / 7).toFixed(1) + " weeks, " + (backend.generalData["age"] / 30).toFixed(1) + " months )"
+            text: isNotEmpty() ? backend.generalData["age"] + " days ( " + (backend.generalData["age"] / 7).toFixed(1) + " weeks, " + (backend.generalData["age"] / 30).toFixed(1) + " months )" : ""
             font.pixelSize: 20
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
@@ -224,6 +227,35 @@ GridLayout {
             font.pixelSize: 20
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+        }
+    }
+
+    // Total Lines
+    Label {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40
+        Text {
+            text: qsTr("Total Lines :")
+            font.pixelSize: 20
+            rightPadding: 20
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+        }
+        background: Rectangle {
+            color: "#21be2b"
+        }
+    }
+    Label {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40
+        Text {
+            text: isNotEmpty() ? backend.generalData["total_lines"].split(" ")[0] + " ( " + backend.generalData["total_lines"].split(" ")[1] + " insertions, " + backend.generalData["total_lines"].split(" ")[2] + " deletions )" : ""
+            font.pixelSize: 20
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+        }
+        background: Rectangle {
+            color: "#21be2b"
         }
     }
 }

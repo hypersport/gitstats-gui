@@ -1,5 +1,5 @@
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls.Basic
 import App 1.0
 
 ApplicationWindow {
@@ -24,6 +24,10 @@ ApplicationWindow {
         id: folderDialog
     }
 
+    LoadingWindow {
+        id: loadingWindow
+    }
+
     AboutWindow {
         id: aboutWindow
     }
@@ -34,5 +38,12 @@ ApplicationWindow {
     
     Connections {
         id: connections
+    }
+
+    background: Rectangle {
+        gradient: Gradient {
+            GradientStop { position: 0; color: "#ffffff" }
+            GradientStop { position: 1; color: "#c1bbf9" }
+        }
     }
 }

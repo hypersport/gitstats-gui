@@ -1,4 +1,5 @@
 import os
+import re
 import subprocess
 import datetime
 
@@ -32,14 +33,26 @@ class GitCommand:
         return result[0]
 
     def generateGitStats(self, path: str):
+        self._commit_stats = []
         command = 'git log -1 --pretty=format:"%H"'
         result = self._runCommand(command, path)
         if result[0]:
             last_commit = result[0].strip()
             # Get commit stats
-            command = f'git rev-list --pretty=format:"%at %ai %aN" {last_commit} | grep -v ^commit'
+            command = f'git log --shortstat --first-parent -m --pretty=format:"%at %ai %aN" {last_commit}'
             result = self._runCommand(command, path)
-            self._commit_stats = result[0].strip().split('\n')
+            commits = result[0].strip().split('\n\n')
+            pattern = re.compile(r'(\d+) (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) [\+\-]\d{4} (\w+)')
+            for commit in commits:
+                match = pattern.match(commit)
+                if not match:
+                    continue
+                timestamp, datetime_, user = match.groups()
+                insertions = re.search(r"(\d+) insertions?\(\+\)", commit)
+                deletions = re.search(r"(\d+) deletions?\(-\)", commit)
+                insertions_count = insertions.group(1) if insertions else '0'
+                deletions_count = deletions.group(1) if deletions else '0'
+                self._commit_stats.append(f'{timestamp} {datetime_} {user} {insertions_count} {deletions_count}')
             # Get file stats
             self._file_stats = {'Unknown': 0}
             command = f'git ls-tree -r --name-only {last_commit}'
@@ -83,5 +96,14 @@ class GitCommand:
     def getTotalAuthors(self):
         authors = set()
         for commit in self._commit_stats:
-            authors.add(commit.split(' ')[4])
+            authors.add(commit.split(' ')[3])
         return len(authors)
+
+    def getTotalLines(self):
+        total_insertions = 0
+        total_deletions = 0
+        for commit in self._commit_stats:
+            insertions, deletions = commit.split(' ')[4:6]
+            total_insertions += int(insertions)
+            total_deletions += int(deletions)
+        return f'{total_insertions - total_deletions} {total_insertions} {total_deletions}'

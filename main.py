@@ -8,14 +8,18 @@ if __name__ == '__main__':
 
     # Set up QQmlApplicationEngine
     engine = QQmlApplicationEngine()
-    # Add the current directory to the import path
-    engine.addImportPath(sys.path[0])
-
+    
     # Create the backend and expose it to QML
     backend = Backend()
     engine.rootContext().setContextProperty('backend', backend)
 
     # Load the QML module
+    if getattr(sys, 'frozen', False):
+        qml_model_path = sys._MEIPASS
+    else:
+        qml_model_path = sys.path[0]
+
+    engine.addImportPath(qml_model_path)
     engine.loadFromModule('App', 'Main' if backend.hasGit else 'QuitWindow')
 
     if not engine.rootObjects():
