@@ -1,5 +1,6 @@
 from PySide6.QtCore import QObject, Signal, Slot, Property, QThread
 import datetime
+import platform
 
 from git_command import GitCommand
 from authors_model import AuthorsModel
@@ -64,6 +65,10 @@ class Backend(QObject):
 
     @Slot(str)
     def openDirectory(self, path: str):
+        if platform.system() == 'Windows':
+            path = path.replace('file:///', '')
+        elif platform.system() == 'Linux':
+            path = path.replace('file://', '')
         if self.isGitRepo(path):
             self._directory = path
             self._recent_dirs_model.addDirectory(path)
