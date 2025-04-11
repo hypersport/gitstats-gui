@@ -1,9 +1,9 @@
-from PySide6.QtCore import QObject, Signal, Slot, Property, QThread
 import datetime
 import platform
+from PySide6.QtCore import QObject, Signal, Slot, Property, QThread
 
 from git_command import GitCommand
-from authors_model import AuthorsModel
+from authors_model import AuthorsModel, AuthorsSortableModel
 from recent_directories_model import RecentDirectoriesModel
 
 
@@ -30,12 +30,14 @@ class Backend(QObject):
         self._is_loading = False
         self._git_command = GitCommand()
         self._authors_model = None
+        self._authors_sortable_model = None
         self._recent_dirs_model = RecentDirectoriesModel()
         self._recent_dirs_model.loadFromFile()
         self._directory = self._recent_dirs_model.getLatestDirectory()
         self._general_data = {'name': '', 'branch': '', 'first_commit_time': '',
                               'last_commit_time': '', 'age': '', 'total_files': '',
-                              'total_commits': '', 'total_authors': '', 'total_lines': ''}
+                              'total_commits': '', 'total_authors': '', 'total_lines': '',
+                              'generated': ''}
         self._git_command_thread = None
 
     @Property(QObject, constant=True)
@@ -44,7 +46,7 @@ class Backend(QObject):
 
     @Property(QObject, constant=True)
     def authorsModel(self):
-        return self._authors_model
+        return self._authors_sortable_model
 
     def generateGitStats(self):
         self._is_loading = True
@@ -113,8 +115,8 @@ class Backend(QObject):
 
     def _generateAuthorsData(self):
         authors = self._git_command.getAuthorsData()
-        authors.sort(key=lambda x: x[1], reverse=True)
         self._authors_model = AuthorsModel(authors)
+        self._authors_sortable_model = AuthorsSortableModel(self._authors_model)
 
     def getProject(self):
         return self._general_data

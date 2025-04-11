@@ -1,6 +1,8 @@
 import json
 import os
 
+from logger import logger
+
 from PySide6.QtCore import QAbstractListModel, Qt, QModelIndex
 
 
@@ -47,7 +49,7 @@ class RecentDirectoriesModel(QAbstractListModel):
             with open(filepath, 'w', encoding='utf-8') as file:
                 json.dump(self._directories, file)
         except Exception as e:
-            print(f'Error saving directories to file: {e}')
+            logger.error(f'Error saving directories to file: {e}')
 
     def loadFromFile(self, filepath='cache'):
         """Load the directories from a JSON file."""
@@ -59,7 +61,7 @@ class RecentDirectoriesModel(QAbstractListModel):
                 self._directories = directories[:10]
                 self.layoutChanged.emit()
         except Exception as e:
-            print(f'Error loading directories from file: {e}')
+            logger.error(f'Error loading directories from file: {e}')
 
     def clearDirectories(self):
         """Clear all directories from the list."""
