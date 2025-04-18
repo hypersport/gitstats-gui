@@ -61,7 +61,7 @@ ColumnLayout {
             delegate: Rectangle {
                 implicitWidth: tableView.width / 10
                 implicitHeight: 40
-                color: model.row % 2 === 1 ? "#21be2b" : "transparent"
+                color: model.row % 2 === 1 ? "#81e889" : "transparent"
                 Text {
                     text: model.display
                     anchors.centerIn: parent
