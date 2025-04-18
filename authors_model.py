@@ -2,11 +2,11 @@ from PySide6.QtCore import Qt, QAbstractTableModel, QSortFilterProxyModel, Signa
 
 
 class AuthorsModel(QAbstractTableModel):
-    def __init__(self, data, parent=None):
+    def __init__(self, data=[], parent=None):
         super().__init__(parent)
         self._data = data
-        self._headers = ['Author', 'Commits', 'Total Lines', 'Insertions', 'Deletions',
-        'First Commit', 'Last Commit', 'Days', 'Active Days', 'Active Percentage']
+        self._headers = ['Author', 'Commits', 'First Commit', 'Last Commit', 'Total Lines',
+        'Insertions', 'Deletions', 'Days', 'Active Days', 'Active Percentage']
 
     def rowCount(self, parent=None):
         return len(self._data)
@@ -24,6 +24,11 @@ class AuthorsModel(QAbstractTableModel):
             return self._headers[section]
         return None
 
+    def resetData(self, data):
+        self.beginResetModel()
+        self._data = data
+        self.endResetModel()
+
 
 class AuthorsSortableModel(QSortFilterProxyModel):
     sortOrderChanged = Signal() 
@@ -35,7 +40,7 @@ class AuthorsSortableModel(QSortFilterProxyModel):
         self.setSortCaseSensitivity(Qt.CaseInsensitive)
         self.setSortRole(Qt.DisplayRole)
         self._sortOrder = Qt.DescendingOrder
-        self._sortedColumn = 6
+        self._sortedColumn = 3
         self.sortOrderChanged.emit()
 
     @Slot(int)
@@ -60,6 +65,4 @@ class AuthorsSortableModel(QSortFilterProxyModel):
     
     @Property("QStringList")
     def headers(self):
-        print("kkkkkkkkkkkkkkk")
-        print(self._headers)
         return self._headers

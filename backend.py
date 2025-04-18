@@ -29,8 +29,6 @@ class Backend(QObject):
         super().__init__()
         self._is_loading = False
         self._git_command = GitCommand()
-        self._authors_model = None
-        self._authors_sortable_model = None
         self._recent_dirs_model = RecentDirectoriesModel()
         self._recent_dirs_model.loadFromFile()
         self._directory = self._recent_dirs_model.getLatestDirectory()
@@ -39,14 +37,12 @@ class Backend(QObject):
                               'total_commits': '', 'total_authors': '', 'total_lines': '',
                               'generated': ''}
         self._git_command_thread = None
+        self._authors_model = AuthorsModel()
+        self.authors_model = AuthorsSortableModel(self._authors_model)
 
     @Property(QObject, constant=True)
     def recentDirsModel(self):
         return self._recent_dirs_model
-
-    @Property(QObject, constant=True)
-    def authorsModel(self):
-        return self._authors_sortable_model
 
     def generateGitStats(self):
         self._is_loading = True
@@ -115,8 +111,7 @@ class Backend(QObject):
 
     def _generateAuthorsData(self):
         authors = self._git_command.getAuthorsData()
-        self._authors_model = AuthorsModel(authors)
-        self._authors_sortable_model = AuthorsSortableModel(self._authors_model)
+        self._authors_model.resetData(authors)
 
     def getProject(self):
         return self._general_data

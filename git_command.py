@@ -130,7 +130,7 @@ class GitCommand:
         for user, data in authors.items():
             first_commit_date = datetime.datetime.strptime(data[1], date_format)
             last_commit_date = datetime.datetime.strptime(data[2], date_format)
-            days = max(1, (last_commit_date - first_commit_date).days)
-            active_percentage = (data[4] / days) * 100
+            days = (last_commit_date - first_commit_date).days + 1
+            active_percentage = round((data[4] / days) * 100, 2)
             result.append([user, data[0], data[1], data[2], data[5] - data[6], data[5], data[6], days, data[4], active_percentage])
         return result
