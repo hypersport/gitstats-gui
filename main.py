@@ -13,6 +13,7 @@ if __name__ == '__main__':
     backend = Backend()
     engine.rootContext().setContextProperty('backend', backend)
     engine.rootContext().setContextProperty('authorsModel', backend.authors_model)
+    engine.rootContext().setContextProperty('authorsOfYearModel', backend.authors_of_year_model)
 
     # Load the QML module
     if getattr(sys, 'frozen', False):

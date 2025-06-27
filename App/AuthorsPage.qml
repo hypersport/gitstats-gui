@@ -2,87 +2,53 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Basic
 
-ColumnLayout {
-    // anchors.fill: parent
-    spacing: 0
-
-    // Header Row for Sorting
-    RowLayout {
-        Layout.fillWidth: true
-        spacing: 0
+Page {
+    header: TabBar {
+        id: authoursTabBar
+        width: parent.width
 
         Repeater {
-            model: authorsModel.headers
+            model: [qsTr("General"), qsTr("Authors Of Year"), qsTr("Authors Of Month")]
 
-            Rectangle {
-                Layout.fillWidth: true
-                height: 40
-                color: authorsModel.sortedColumn === index ? "#bdbebf" : "transparent"
-
-                RowLayout {
-                    anchors.centerIn: parent
-                    spacing: 0
-
-                    Text {
-                        text: modelData
-                    }
-                    Text {
-                        text: (authorsModel.sortedColumn === index)
-                              ? (authorsModel.currentSortOrder === Qt.AscendingOrder ? " ↑" : " ↓")
-                              : ""
-                    }
+            TabButton {
+                id: tabButton
+                text: modelData
+                contentItem: Text {
+                    text: tabButton.text
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
                 }
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: authorsModel.toggleSort(index)
+                background: Rectangle {
+                    implicitWidth: 100
+                    implicitHeight: 40
+                    color: authoursTabBar.currentIndex === index ? "#818181" : "transparent"
                 }
             }
         }
     }
-    Rectangle {
-        color: "#000000"
-        Layout.fillWidth: true
-        height: 1
+
+    StackLayout {
+        id: authoursStackLayout
+        currentIndex: authoursTabBar.currentIndex
+        anchors.fill: parent
+
+        AuthorsGeneralPage {
+            id: authorsGeneralPage
+        }
+        AuthorsOfYearPage {
+            id: authorsOfYearPage
+        }
+        AuthorsOfMonthPage {
+            id: authorsOfMonthPage
+        }
     }
-    ScrollView {
-        id: control
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        clip: true
-        // Data Table
-        TableView {
-            id: tableView
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            model: authorsModel
-            clip: true
 
-            delegate: Rectangle {
-                implicitWidth: tableView.width / 10
-                implicitHeight: 40
-                color: model.row % 2 === 1 ? "#81e889" : "transparent"
-                Text {
-                    text: model.display
-                    anchors.centerIn: parent
-                }
-            }
-        }
-
-        ScrollBar.vertical: ScrollBar {
-            parent: control
-            x: control.mirrored ? 0 : control.width - width
-            y: control.topPadding
-            height: control.availableHeight
-            active: control.ScrollBar.horizontal.active
-        }
-
-        ScrollBar.horizontal: ScrollBar {
-            parent: control
-            x: control.leftPadding
-            y: control.height - height
-            width: control.availableWidth
-            active: control.ScrollBar.vertical.active
+    background: Rectangle {
+        gradient: Gradient {
+            GradientStop { position: 0; color: "#ffffff" }
+            GradientStop { position: 1; color: "#c1bbf9" }
         }
     }
 }

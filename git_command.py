@@ -134,3 +134,21 @@ class GitCommand:
             active_percentage = round((data[4] / days) * 100, 2)
             result.append([user, data[0], data[1], data[2], data[5] - data[6], data[5], data[6], days, data[4], active_percentage])
         return result
+
+    def getAuthorsOfYearData(self):
+        years = {}
+        for commit in self._commit_stats:
+            _, datetime_, user, _, _ = commit
+            year = datetime_.split(' ')[0].split('-')[0]
+            if year in years:
+                years[year][0] += 1
+                years[year][1][user] = years[year][1].get(user, 0) + 1
+            else:
+                years[year] = [1, {user: 1}]
+        result = []
+        for year, data in years.items():
+            sorted_authors = dict(sorted(data[1].items(), key=lambda item: item[1], reverse=True))
+            top3 = list(sorted_authors.items())[:3]
+            result.append([year, len(data[1]), data[0], top3[0][0], top3[1][0] if len(top3) > 1 else '', top3[2][0] if len(top3) > 2 else '',
+                           top3[0][1], top3[1][1] if len(top3) > 1 else 0, top3[2][1] if len(top3) > 2 else 0])
+        return result

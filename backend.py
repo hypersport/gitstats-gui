@@ -1,9 +1,10 @@
 import datetime
 import platform
-from PySide6.QtCore import QObject, Signal, Slot, Property, QThread
+from PySide6.QtCore import Qt, QObject, Signal, Slot, Property, QThread
 
 from git_command import GitCommand
-from authors_model import AuthorsModel, AuthorsSortableModel
+from authors_model import AuthorsModel, AuthorsOfYearModel
+from sortable_model import SortableModel
 from recent_directories_model import RecentDirectoriesModel
 
 
@@ -38,7 +39,11 @@ class Backend(QObject):
                               'generated': ''}
         self._git_command_thread = None
         self._authors_model = AuthorsModel()
-        self.authors_model = AuthorsSortableModel(self._authors_model)
+        self.authors_model = SortableModel(self._authors_model, Qt.DescendingOrder, 3)
+        self._authors_of_year_model = AuthorsOfYearModel()
+        self.authors_of_year_model = SortableModel(self._authors_of_year_model, Qt.DescendingOrder, 0)
+        # self._authors_of_month_model = AuthorsOfMonthModel()
+        # self.authors_of_month_model = SortableModel(self._authors_of_month_model, Qt.DescendingOrder, 0)
 
     @Property(QObject, constant=True)
     def recentDirsModel(self):
@@ -112,6 +117,8 @@ class Backend(QObject):
     def _generateAuthorsData(self):
         authors = self._git_command.getAuthorsData()
         self._authors_model.resetData(authors)
+        authors_of_year = self._git_command.getAuthorsOfYearData()
+        self._authors_of_year_model.resetData(authors_of_year)
 
     def getProject(self):
         return self._general_data

@@ -14,3 +14,6 @@ Connections 1.0 Connections.qml
 PageStackLayout 1.0 PageStackLayout.qml
 GeneralPage 1.0 GeneralPage.qml
 AuthorsPage 1.0 AuthorsPage.qml
+AuthorsGeneralPage 1.0 AuthorsGeneralPage.qml
+AuthorsOfYearPage 1.0 AuthorsOfYearPage.qml
+AuthorsOfMonthPage 1.0 AuthorsOfMonthPage.qml
