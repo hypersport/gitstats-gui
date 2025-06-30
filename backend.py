@@ -1,9 +1,11 @@
 import datetime
 import platform
+from logger import logger
+
 from PySide6.QtCore import Qt, QObject, Signal, Slot, Property, QThread
 
 from git_command import GitCommand
-from authors_model import AuthorsModel, AuthorsOfYearModel
+from authors_model import AuthorsModel, AuthorsOfYearMonthModel
 from sortable_model import SortableModel
 from recent_directories_model import RecentDirectoriesModel
 
@@ -17,8 +19,12 @@ class GitCommandThread(QThread):
         self._directory = directory
 
     def run(self):
-        self._git_command.generateGitStats(self._directory)
-        self.finished.emit()
+        try:
+            self._git_command.generateGitStats(self._directory)
+        except Exception as e:
+            logger.error(f'Error generate git stats: {e}')
+        finally:
+            self.finished.emit()
 
 
 class Backend(QObject):
@@ -40,10 +46,10 @@ class Backend(QObject):
         self._git_command_thread = None
         self._authors_model = AuthorsModel()
         self.authors_model = SortableModel(self._authors_model, Qt.DescendingOrder, 3)
-        self._authors_of_year_model = AuthorsOfYearModel()
+        self._authors_of_year_model = AuthorsOfYearMonthModel()
         self.authors_of_year_model = SortableModel(self._authors_of_year_model, Qt.DescendingOrder, 0)
-        # self._authors_of_month_model = AuthorsOfMonthModel()
-        # self.authors_of_month_model = SortableModel(self._authors_of_month_model, Qt.DescendingOrder, 0)
+        self._authors_of_month_model = AuthorsOfYearMonthModel(isYear=False)
+        self.authors_of_month_model = SortableModel(self._authors_of_month_model, Qt.DescendingOrder, 0)
 
     @Property(QObject, constant=True)
     def recentDirsModel(self):
@@ -117,8 +123,9 @@ class Backend(QObject):
     def _generateAuthorsData(self):
         authors = self._git_command.getAuthorsData()
         self._authors_model.resetData(authors)
-        authors_of_year = self._git_command.getAuthorsOfYearData()
-        self._authors_of_year_model.resetData(authors_of_year)
+        authors_of_year_month = self._git_command.getAuthorsOfYearMonthData()
+        self._authors_of_year_model.resetData(authors_of_year_month[0])
+        self._authors_of_month_model.resetData(authors_of_year_month[1])
 
     def getProject(self):
         return self._general_data

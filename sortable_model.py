@@ -38,6 +38,6 @@ class SortableModel(QSortFilterProxyModel):
     def currentSortOrder(self):
         return 1 if self._sortOrder == Qt.DescendingOrder else 0
 
-    @Property("QStringList")
+    @Property("QStringList", notify=sortOrderChanged)
     def headers(self):
         return self._headers

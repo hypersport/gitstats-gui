@@ -10,8 +10,8 @@ class GitCommand:
         self._file_stats = {'Unknown': 0}
 
     def _runCommand(self, command: str, path=None):
-        result = subprocess.run(command, cwd=path, shell=True,
-                                capture_output=True, text=True)
+        result = subprocess.run(command, cwd=path, shell=True, capture_output=True,
+                                text=True, encoding='utf-8', errors='ignore')
         return (result.stdout, result.stderr)
 
     def getGitVersion(self):
@@ -135,20 +135,32 @@ class GitCommand:
             result.append([user, data[0], data[1], data[2], data[5] - data[6], data[5], data[6], days, data[4], active_percentage])
         return result
 
-    def getAuthorsOfYearData(self):
+    def getAuthorsOfYearMonthData(self):
         years = {}
+        months = {}
         for commit in self._commit_stats:
             _, datetime_, user, _, _ = commit
             year = datetime_.split(' ')[0].split('-')[0]
+            month = '-'.join(datetime_.split(' ')[0].split('-')[:2])
             if year in years:
                 years[year][0] += 1
                 years[year][1][user] = years[year][1].get(user, 0) + 1
             else:
                 years[year] = [1, {user: 1}]
-        result = []
+            if month in months:
+                months[month][0] += 1
+                months[month][1][user] = months[month][1].get(user, 0) + 1
+            else:
+                months[month] = [1, {user: 1}]
+        result = [[], []]
         for year, data in years.items():
             sorted_authors = dict(sorted(data[1].items(), key=lambda item: item[1], reverse=True))
             top3 = list(sorted_authors.items())[:3]
-            result.append([year, len(data[1]), data[0], top3[0][0], top3[1][0] if len(top3) > 1 else '', top3[2][0] if len(top3) > 2 else '',
+            result[0].append([year, len(data[1]), data[0], top3[0][0], top3[1][0] if len(top3) > 1 else '', top3[2][0] if len(top3) > 2 else '',
+                           top3[0][1], top3[1][1] if len(top3) > 1 else 0, top3[2][1] if len(top3) > 2 else 0])
+        for month, data in months.items():
+            sorted_authors = dict(sorted(data[1].items(), key=lambda item: item[1], reverse=True))
+            top3 = list(sorted_authors.items())[:3]
+            result[1].append([month, len(data[1]), data[0], top3[0][0], top3[1][0] if len(top3) > 1 else '', top3[2][0] if len(top3) > 2 else '',
                            top3[0][1], top3[1][1] if len(top3) > 1 else 0, top3[2][1] if len(top3) > 2 else 0])
         return result

@@ -37,18 +37,16 @@ Page {
         AuthorsGeneralPage {
             id: authorsGeneralPage
         }
-        AuthorsOfYearPage {
+        AuthorsOfYearMonthPage {
             id: authorsOfYearPage
+            authorsModel: authorsOfYearModel
         }
-        AuthorsOfMonthPage {
+        AuthorsOfYearMonthPage {
             id: authorsOfMonthPage
+            authorsModel: authorsOfMonthModel
         }
     }
-
     background: Rectangle {
-        gradient: Gradient {
-            GradientStop { position: 0; color: "#ffffff" }
-            GradientStop { position: 1; color: "#c1bbf9" }
-        }
+        opacity: 0
     }
 }

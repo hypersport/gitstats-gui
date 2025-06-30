@@ -4,6 +4,9 @@ import QtQuick.Controls.Basic
 
 ColumnLayout {
     // anchors.fill: parent
+    id: control
+    property var authorsModel
+
     spacing: 0
 
     // Header Row for Sorting
@@ -12,12 +15,12 @@ ColumnLayout {
         spacing: 0
 
         Repeater {
-            model: authorsOfYearModel.headers
+            model: control.authorsModel.headers
 
             Rectangle {
-                Layout.preferredWidth: index < 2 ? tableView.width / 12 : tableView.width / 5
+                Layout.preferredWidth: index < 2 ? control.width / 12 : control.width / 5
                 height: 40
-                color: authorsOfYearModel.sortedColumn === index ? "#bdbebf" : "transparent"
+                color: control.authorsModel.sortedColumn === index ? "#bdbebf" : "transparent"
 
                 RowLayout {
                     anchors.centerIn: parent
@@ -27,15 +30,15 @@ ColumnLayout {
                         text: modelData
                     }
                     Text {
-                        text: (authorsOfYearModel.sortedColumn === index)
-                              ? (authorsOfYearModel.currentSortOrder === Qt.AscendingOrder ? " ↑" : " ↓")
+                        text: (control.authorsModel.sortedColumn === index)
+                              ? (control.authorsModel.currentSortOrder === Qt.AscendingOrder ? " ↑" : " ↓")
                               : ""
                     }
                 }
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: authorsOfYearModel.toggleSort(index)
+                    onClicked: control.authorsModel.toggleSort(index)
                 }
             }
         }
@@ -46,7 +49,7 @@ ColumnLayout {
         height: 1
     }
     ScrollView {
-        id: control
+        id: scrollView
         Layout.fillWidth: true
         Layout.fillHeight: true
         clip: true
@@ -55,7 +58,7 @@ ColumnLayout {
             id: tableView
             Layout.fillWidth: true
             Layout.fillHeight: true
-            model: authorsOfYearModel
+            model: control.authorsModel
             clip: true
 
             delegate: Rectangle {
@@ -70,19 +73,19 @@ ColumnLayout {
         }
 
         ScrollBar.vertical: ScrollBar {
-            parent: control
-            x: control.mirrored ? 0 : control.width - width
-            y: control.topPadding
-            height: control.availableHeight
-            active: control.ScrollBar.horizontal.active
+            parent: scrollView
+            x: scrollView.mirrored ? 0 : scrollView.width - width
+            y: scrollView.topPadding
+            height: scrollView.availableHeight
+            active: scrollView.ScrollBar.horizontal.active
         }
 
         ScrollBar.horizontal: ScrollBar {
-            parent: control
-            x: control.leftPadding
-            y: control.height - height
-            width: control.availableWidth
-            active: control.ScrollBar.vertical.active
+            parent: scrollView
+            x: scrollView.leftPadding
+            y: scrollView.height - height
+            width: scrollView.availableWidth
+            active: scrollView.ScrollBar.vertical.active
         }
     }
 }

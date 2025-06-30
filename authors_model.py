@@ -47,11 +47,11 @@ class AuthorsModel(QAbstractTableModel):
                 self._total[i] += row[i]
 
 
-class AuthorsOfYearModel(QAbstractTableModel):
-    def __init__(self, data=[], parent=None):
+class AuthorsOfYearMonthModel(QAbstractTableModel):
+    def __init__(self, data=[], isYear=True, parent=None):
         super().__init__(parent)
         self._data = data
-        self._headers = ['Year', 'Total Authors', 'Total Commits', 'No.1', 'No.2', 'No.3']
+        self._headers = ['Year' if isYear else 'Month', 'Total Authors', 'Total Commits', 'No.1', 'No.2', 'No.3']
 
     def rowCount(self, parent=None):
         return len(self._data)
@@ -74,11 +74,13 @@ class AuthorsOfYearModel(QAbstractTableModel):
                 return value
             elif column == 2:
                 average = value / self._data[row][1]
-                return f'{value} ({average:.2f} commits per author)'
+                commit = 'commit' if average == 1 else 'commits'
+                return f'{value} ({average:.2f} {commit} per author)'
             else:
                 commits = self._data[row][column + 3]
                 percent = (commits / self._data[row][2] * 100)
-                return f'{value} ({commits} commits {percent:.2f}%)'
+                commit = 'commit' if commits == 1 else 'commits'
+                return f'{value} ({commits} {commit} {percent:.2f}%)'
         return None
 
     def resetData(self, data):
