@@ -1,18 +1,25 @@
 import os
 import re
 import subprocess
-import datetime
+from datetime import datetime
 
 
 class GitCommand:
     def __init__(self):
         self._commit_stats = []
+        self._date_range = []
         self._file_stats = {'Unknown': 0}
 
     def _runCommand(self, command: str, path=None):
         result = subprocess.run(command, cwd=path, shell=True, capture_output=True,
                                 text=True, encoding='utf-8', errors='ignore')
         return (result.stdout, result.stderr)
+
+    def _split_date_range(self, start_timestamp, end_timestamp, n):
+        delta = (end_timestamp - start_timestamp) / (n - 1)
+        for i in range(n):
+            current = start_timestamp + delta * i
+            self._date_range.append(datetime.fromtimestamp(current).strftime('%Y-%m-%d'))
 
     def getGitVersion(self):
         command = 'git version'
@@ -23,14 +30,6 @@ class GitCommand:
         command = 'git rev-parse --is-inside-work-tree'
         result = self._runCommand(command, path)
         return 'true' in result[0].lower()
-
-    def getProjectName(self, path: str):
-        return os.path.basename(os.path.abspath(path))
-
-    def getCurrentBranch(self, path: str):
-        command = 'git branch --show-current'
-        result = self._runCommand(command, path)
-        return result[0]
 
     def generateGitStats(self, path: str):
         self._commit_stats = []
@@ -53,6 +52,9 @@ class GitCommand:
                 insertions_count = insertions.group(1) if insertions else '0'
                 deletions_count = deletions.group(1) if deletions else '0'
                 self._commit_stats.append([timestamp, datetime_, user, insertions_count, deletions_count])
+            first_commit_info = self._commit_stats[-1]
+            last_commit_info = self._commit_stats[0]
+            self._split_date_range(int(first_commit_info[0]), int(last_commit_info[0]), 20)
             # Get file stats
             self._file_stats = {'Unknown': 0}
             command = f'git ls-tree -r --name-only {last_commit}'
@@ -64,34 +66,6 @@ class GitCommand:
                     self._file_stats[file_extension] = self._file_stats.get(file_extension, 0) + 1
                 else:
                     self._file_stats['Unknown'] += 1
-
-    def getFirstCommitTime(self):
-        if not self._commit_stats:
-            return ''
-        first_commit_info = self._commit_stats[-1]
-        return first_commit_info[1]
-    
-    def getLastCommitTime(self):
-        if not self._commit_stats:
-            return ''
-        last_commit_info = self._commit_stats[0]
-        return last_commit_info[1]
-
-    def getAge(self):
-        if not self._commit_stats:
-            return ''
-        first_commit_info = self._commit_stats[-1]
-        first_date = datetime.datetime.fromtimestamp(int(first_commit_info[0]))
-        last_commit_info = self._commit_stats[0]
-        last_date = datetime.datetime.fromtimestamp(int(last_commit_info[0]))
-        delta = last_date - first_date
-        return delta.days
-
-    def getTotalFiles(self):
-        return sum(self._file_stats.values())
-
-    def getTotalCommits(self):
-        return len(self._commit_stats)
 
     def getTotalAuthors(self):
         authors = set()
@@ -107,6 +81,27 @@ class GitCommand:
             total_insertions += int(insertions)
             total_deletions += int(deletions)
         return f'{total_insertions - total_deletions} {total_insertions} {total_deletions}'
+
+    def getGeneralData(self, path: str):
+        general_data = {'name': '', 'branch': '', 'first_commit_time': '',
+                        'last_commit_time': '', 'age': '', 'total_files': '',
+                        'total_commits': '', 'total_authors': '', 'total_lines': ''}
+        general_data['name'] = os.path.basename(os.path.abspath(path))
+        command = 'git branch --show-current'
+        result = self._runCommand(command, path)
+        general_data['branch'] = result[0].strip()
+        if self._commit_stats:
+            general_data['first_commit_time'] = self._date_range[0]
+            general_data['last_commit_time'] = self._date_range[-1]
+            start = datetime.strptime(self._date_range[0], "%Y-%m-%d")
+            end = datetime.strptime(self._date_range[-1], "%Y-%m-%d")
+            delta = end - start
+            general_data['age'] = delta.days
+            general_data['total_files'] = sum(self._file_stats.values())
+            general_data['total_commits'] = len(self._commit_stats)
+            general_data['total_authors'] = self.getTotalAuthors()
+            general_data['total_lines'] = self.getTotalLines()
+        return general_data
 
     def getAuthorsData(self):
         authors = {}
@@ -128,8 +123,8 @@ class GitCommand:
         result = []
         date_format = "%Y-%m-%d"
         for user, data in authors.items():
-            first_commit_date = datetime.datetime.strptime(data[1], date_format)
-            last_commit_date = datetime.datetime.strptime(data[2], date_format)
+            first_commit_date = datetime.strptime(data[1], date_format)
+            last_commit_date = datetime.strptime(data[2], date_format)
             days = (last_commit_date - first_commit_date).days + 1
             active_percentage = round((data[4] / days) * 100, 2)
             result.append([user, data[0], data[1], data[2], data[5] - data[6], data[5], data[6], days, data[4], active_percentage])

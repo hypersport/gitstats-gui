@@ -109,15 +109,9 @@ class Backend(QObject):
         return result
 
     def _generateData(self):
-        self._general_data['name'] = self._git_command.getProjectName(self._directory)
-        self._general_data['branch'] = self._git_command.getCurrentBranch(self._directory)
-        self._general_data['first_commit_time'] = self._git_command.getFirstCommitTime()
-        self._general_data['last_commit_time'] = self._git_command.getLastCommitTime()
-        self._general_data['age'] = self._git_command.getAge()
-        self._general_data['total_files'] = self._git_command.getTotalFiles()
-        self._general_data['total_commits'] = self._git_command.getTotalCommits()
-        self._general_data['total_authors'] = self._git_command.getTotalAuthors()
-        self._general_data['total_lines'] = self._git_command.getTotalLines()
+        git_version = self._general_data['git']
+        self._general_data = self._git_command.getGeneralData(self._directory)
+        self._general_data['git'] = git_version
         self._general_data['generated'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     def _generateAuthorsData(self):
