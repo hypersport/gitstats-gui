@@ -36,6 +36,10 @@ ApplicationWindow {
         id: notGitRepoWindow
     }
     
+    ChartsTooltip {
+        id: chartsTooltip
+    }
+
     Connections {
         id: connections
     }

@@ -8,7 +8,7 @@ Page {
         width: parent.width
 
         Repeater {
-            model: [qsTr("General"), qsTr("Authors Of Year"), qsTr("Authors Of Month")]
+            model: [qsTr("General"), qsTr("Authors Of Year"), qsTr("Authors Of Month"), qsTr("Authors Chart")]
 
             TabButton {
                 id: tabButton
@@ -44,6 +44,9 @@ Page {
         AuthorsOfYearMonthPage {
             id: authorsOfMonthPage
             authorsModel: authorsOfMonthModel
+        }
+        AuthorsChartPage {
+            id: authorsChartPage
         }
     }
     background: Rectangle {
