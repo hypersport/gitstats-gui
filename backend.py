@@ -43,6 +43,8 @@ class Backend(QObject):
                               'last_commit_time': '', 'age': '', 'total_files': '',
                               'total_commits': '', 'total_authors': '', 'total_lines': '',
                               'generated': ''}
+        self._year_month_data = {'years': [], 'authorsOfYear': [], 'filesOfYear': [], 'linesOfYear': [],
+                                 'months': [], 'authorsOfMonth': [], 'filesOfMonth': [], 'linesOfMonth': []}
         self._git_command_thread = None
         self._authors_model = AuthorsModel()
         self.authors_model = SortableModel(self._authors_model, Qt.DescendingOrder, 3)
@@ -120,11 +122,18 @@ class Backend(QObject):
         authors_of_year_month = self._git_command.getAuthorsOfYearMonthData()
         self._authors_of_year_model.resetData(authors_of_year_month[0])
         self._authors_of_month_model.resetData(authors_of_year_month[1])
+        for data in authors_of_year_month[0]:
+            self._year_month_data['years'].append(data[0])
+            self._year_month_data['authorsOfYear'].append(data[1])
 
     def getProject(self):
         return self._general_data
 
+    def getYearMonthData(self):
+        return self._year_month_data
+
     def setProject(self):
+        self._year_month_data = {key: [] for key in self._year_month_data}
         if self._directory and self.isGitRepo(self._directory):
             self._generateData()
             self._generateAuthorsData()
@@ -138,3 +147,5 @@ class Backend(QObject):
 
     generalData = Property(
         'QVariantMap', getProject, setProject, notify=projectChanged)
+    yearMonthData = Property(
+        'QVariantMap', getYearMonthData, setProject, notify=projectChanged)
