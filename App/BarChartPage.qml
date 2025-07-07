@@ -5,6 +5,10 @@ import QtQuick.Controls.Basic
 
 ColumnLayout {
     // anchors.fill: parent
+    id: control
+    property var dataOfYearModel
+    property var dataOfMonthModel
+
     spacing: 5
 
     ChartView {
@@ -22,11 +26,11 @@ ColumnLayout {
             }
             axisY: ValueAxis {
                 min: 0
-                max: Math.max(...backend.yearMonthData.authorsOfYear)
+                max: getMaxValue(control.dataOfYearModel)
             }
             BarSet {
                 label: "Yearly Stats"
-                values: backend.yearMonthData.authorsOfYear
+                values: control.dataOfYearModel
             }
         }
     }
@@ -43,15 +47,20 @@ ColumnLayout {
 
             axisX: BarCategoryAxis {
                 categories: backend.yearMonthData.months
+                labelsAngle: 90
             }
             axisY: ValueAxis {
                 min: 0
-                max: Math.max(...backend.yearMonthData.authorsOfMonth)
+                max: getMaxValue(control.dataOfMonthModel)
             }
             BarSet {
                 label: "Monthly Stats"
-                values: backend.yearMonthData.authorsOfMonth
+                values: control.dataOfMonthModel
             }
         }
+    }
+
+    function getMaxValue(data) {
+        return data.length > 0 ? Math.max(...data) : 10
     }
 }

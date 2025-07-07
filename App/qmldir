@@ -16,6 +16,6 @@ GeneralPage 1.0 GeneralPage.qml
 AuthorsPage 1.0 AuthorsPage.qml
 AuthorsGeneralPage 1.0 AuthorsGeneralPage.qml
 AuthorsOfYearMonthPage 1.0 AuthorsOfYearMonthPage.qml
-AuthorsChartPage 1.0 AuthorsChartPage.qml
+BarChartPage 1.0 BarChartPage.qml
 FilesPage 1.0 FilesPage.qml
 ChartsTooltip 1.0 ChartsTooltip.qml

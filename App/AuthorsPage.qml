@@ -45,8 +45,10 @@ Page {
             id: authorsOfMonthPage
             authorsModel: authorsOfMonthModel
         }
-        AuthorsChartPage {
+        BarChartPage {
             id: authorsChartPage
+            dataOfYearModel: backend.yearMonthData.authorsOfYear
+            dataOfMonthModel: backend.yearMonthData.authorsOfMonth
         }
     }
     background: Rectangle {
