@@ -122,9 +122,12 @@ class Backend(QObject):
         authors_of_year_month = self._git_command.getAuthorsOfYearMonthData()
         self._authors_of_year_model.resetData(authors_of_year_month[0])
         self._authors_of_month_model.resetData(authors_of_year_month[1])
-        for data in authors_of_year_month[0]:
+        for data in reversed(authors_of_year_month[0]):
             self._year_month_data['years'].append(data[0])
             self._year_month_data['authorsOfYear'].append(data[1])
+        for data in reversed(authors_of_year_month[1]):
+            self._year_month_data['months'].append(data[0])
+            self._year_month_data['authorsOfMonth'].append(data[1])
 
     def getProject(self):
         return self._general_data

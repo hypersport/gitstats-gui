@@ -37,36 +37,21 @@ ColumnLayout {
         Layout.fillHeight: true
         antialiasing: true
 
-        LineSeries {
-            name: "Monthly Stats"
-            axisX: monthTimeAxis
-            axisY: monthValueAxis
+        BarSeries {
+            labelsVisible: true
+            labelsPosition: AbstractBarSeries.LabelsInsideEnd
 
-            XYPoint { x: Date.parse("2020-02-01"); y: 20 }
-            XYPoint { x: Date.parse("2020-03-01"); y: 30 }
-            XYPoint { x: Date.parse("2020-10-01"); y: 75 }
-            XYPoint { x: Date.parse("2020-11-01"); y: 185 }
-
-            onHovered: (point, state) => {
-                let content = "Date: " + Qt.formatDateTime(new Date(point.x), "yyyy-MM") + "\nValue: " + point.y.toFixed(2)
-                chartsTooltip.show(monthChartView, point, state, content)
+            axisX: BarCategoryAxis {
+                categories: backend.yearMonthData.months
             }
-        }
-        DateTimeAxis {
-            id: monthTimeAxis
-            format: "yyyy-MM"
-            titleText: "Month"
-            //min: new Date(2020, 1, 1)
-            //max: new Date(2020, 10, 1)
-            tickCount: 8
-        }
-
-        ValueAxis {
-            id: monthValueAxis
-            min: 0
-            //max: 90
-            tickCount: 8
-            titleText: "Value"
+            axisY: ValueAxis {
+                min: 0
+                max: Math.max(...backend.yearMonthData.authorsOfMonth)
+            }
+            BarSet {
+                label: "Monthly Stats"
+                values: backend.yearMonthData.authorsOfMonth
+            }
         }
     }
 }
